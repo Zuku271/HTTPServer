@@ -82,6 +82,7 @@ public class Server
 			startPage = config.getProperty("startPage");
 			
 			serverSocket = new ServerSocket(PORT);
+			System.out.println("Uruchamiam serwer na porcie: " + PORT);
 			while (true)
 			{
 				Socket s = serverSocket.accept();
@@ -109,10 +110,10 @@ public class Server
 					//pageContent = generatePageFromFile(localPath);
 				}
 				
-				if (pageContent == null)
+				/*if (pageContent == null || requestedPath == "/")
 				{
-					//pageContent = generateDefaultPage();
-				}
+					pageContent = generateDefaultPage();
+				}*/
 				// wyslanie strony
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream(), "UTF-8"));
 				pw.println(pageContent);
@@ -127,9 +128,29 @@ public class Server
 		}
 	}
 	
-	public static void main(String[] args) {
-		System.out.println("Uruchamiam serwer na porcie: ");
+	private String generateDefaultPage() {
+		StringBuilder sb = new StringBuilder();
+		// zobacz: https://pl.wikipedia.org/wiki/Hypertext_Transfer_Protocol
+		// naglowek http
+		sb.append("HTTP/1.1 200 OK").append("\r\n");
+		sb.append("Connection: close").append("\r\n");
+		sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
+		sb.append("\r\n");
+		// tresc http (html)
+		sb.append("<html>");
+		sb.append("<head>");
+		sb.append("</head>");
+		sb.append("<body>");
+		sb.append("<p>").append("Witaj w dniu: ").append(new Date()).append("</p>");
+		sb.append("</body>");
+		sb.append("</html>");
+		return sb.toString();
+	}
+	
+	public static void main(String[] args)
+	{
 		Server instance = new Server();
 		instance.runServer("config.txt");
+		System.out.println("Uruchamiam serwer na porcie: ");
 	}
 }
