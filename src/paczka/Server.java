@@ -99,15 +99,19 @@ public class Server
 				System.out.println("GET Path:" + requestedPath);
 
 				String pageContent = null;
-				if (requestedPath.startsWith("/dyn/date"))
+				
+				if (requestedPath.contentEquals("/"))
+				{
+					pageContent = generatePageFromFile(config.getProperty("startPage"));
+				}
+				else if (requestedPath.startsWith("/dyn/date"))
 				{
 					//pageContent = generateJSONDatePage();
 				}
-				
 				else
 				{
 					String localPath = "res" + requestedPath;
-					//pageContent = generatePageFromFile(localPath);
+					pageContent = generatePageFromFile(localPath);
 				}
 				
 				/*if (pageContent == null || requestedPath == "/")
@@ -128,22 +132,39 @@ public class Server
 		}
 	}
 	
-	private String generateDefaultPage() {
+	private String readTextFile(String path)
+	{
 		StringBuilder sb = new StringBuilder();
-		// zobacz: https://pl.wikipedia.org/wiki/Hypertext_Transfer_Protocol
-		// naglowek http
+
+		File filePath = new File(path);
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"))) {
+			String ln = "";
+			while ((ln = br.readLine()) != null) {
+				sb.append(ln).append("\n");
+			}
+		} catch (Exception e) {
+			return null;
+		}
+
+		return sb.toString();
+	}
+	
+	private String generatePageFromFile(String path)
+	{
+		StringBuilder sb = new StringBuilder();
+
 		sb.append("HTTP/1.1 200 OK").append("\r\n");
 		sb.append("Connection: close").append("\r\n");
 		sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
 		sb.append("\r\n");
+
 		// tresc http (html)
-		sb.append("<html>");
-		sb.append("<head>");
-		sb.append("</head>");
-		sb.append("<body>");
-		sb.append("<p>").append("Witaj w dniu: ").append(new Date()).append("</p>");
-		sb.append("</body>");
-		sb.append("</html>");
+		String fileContent = readTextFile(path);
+		if (fileContent == null) {
+			return null;
+		}
+		sb.append(fileContent);
+
 		return sb.toString();
 	}
 	

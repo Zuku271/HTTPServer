@@ -1,2 +1,2 @@
 PORT=8889
-startPage=index
+startPage=index.html
