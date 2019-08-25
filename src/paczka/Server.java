@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -93,7 +98,8 @@ public class Server
 
 				String requestedPath = "";
 				String getLine = findGETLine(headerLines);
-				if (getLine != null) {
+				if (getLine != null)
+				{
 					requestedPath = getPathFromGetLine(getLine);
 				}
 				System.out.println("GET Path:" + requestedPath);
@@ -137,12 +143,16 @@ public class Server
 		StringBuilder sb = new StringBuilder();
 
 		File filePath = new File(path);
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8")))
+		{
 			String ln = "";
-			while ((ln = br.readLine()) != null) {
+			while ((ln = br.readLine()) != null) 
+			{
 				sb.append(ln).append("\n");
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			return null;
 		}
 

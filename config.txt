@@ -1,2 +1,4 @@
 PORT=8889
 startPage=index.html
+Content-Type=html=text/html
+Content-Type=xml=application/xml
