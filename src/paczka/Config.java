@@ -1,5 +1,6 @@
 package paczka;
 
+import java.util.List;
 import java.util.Map;
 
 public class Config
@@ -13,12 +14,12 @@ public class Config
 		return port;
 	}
 	
-	public String getPage(String pageName)
+	public String getPages(String pageName)
 	{
 		return pages.get(pageName);
 	}
 	
-	public String getContentType(String type)
+	public String getContent_Type(String type)
 	{
 		return content_type.get(type);
 	}

@@ -15,6 +15,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.*;
@@ -75,15 +76,16 @@ public class Server
 		ServerSocket serverSocket = null;
 		try
 		{
-			//FileInputStream configFileInput = new FileInputStream(configFilePath);
-			//Properties config = new Properties();
-			//config.load(configFileInput);
+
 			File configFile = new File(configFilePath);
 			ObjectMapper configObjectMapper = new ObjectMapper();
-			Config config = configObjectMapper.readValue(configFile, Config.class);
+			//Config config = configObjectMapper.readValue(configFile, Config.class);
+			TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
+			Map<String, String> map = configObjectMapper.readValue(configFile, typeRef);
+			
 			
 			PORT = config.getPort();
-			startPage = config.getPage("startPage");
+			startPage = config.getPages("startPage");
 			
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Uruchamiam serwer na porcie: " + PORT);
@@ -107,7 +109,7 @@ public class Server
 				
 				if (requestedPath.contentEquals("/"))
 				{
-					pageContent = generatePageFromFile(config.getProperty("startPage"));
+					pageContent = generatePageFromFile(config.getPages("startPage"));
 				}
 				else if (requestedPath.startsWith("/dyn/date"))
 				{
@@ -180,7 +182,7 @@ public class Server
 	public static void main(String[] args)
 	{
 		Server instance = new Server();
-		instance.runServer("config.txt");
+		instance.runServer("config.json");
 		System.out.println("Uruchamiam serwer na porcie: ");
 	}
 }
