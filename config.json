@@ -1,8 +1,12 @@
 {
     "config" : {
-        "PORT" : "8889",
-        "startPage" : "index",
-        "Content-Type" : [
+        "port" : "8889",
+        "pages" : [
+            {
+                "indexPage" : "index"
+            }
+        ],
+        "content_type" : [
             {
                 "html" : "text/html",
                 "xml" : "application/xml",

@@ -79,16 +79,11 @@ public class Server
 			//Properties config = new Properties();
 			//config.load(configFileInput);
 			File configFile = new File(configFilePath);
-			ObjectMapper config = new ObjectMapper();
-			config.readValue(configFile, Config.class);
+			ObjectMapper configObjectMapper = new ObjectMapper();
+			Config config = configObjectMapper.readValue(configFile, Config.class);
 			
-			
-			if ((PORT = Integer.valueOf(config.getProperty("PORT"))) == 0)
-			{
-				PORT = 8800;
-			}
-			
-			startPage = config.getProperty("startPage");
+			PORT = config.getPort();
+			startPage = config.getPage("startPage");
 			
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Uruchamiam serwer na porcie: " + PORT);
