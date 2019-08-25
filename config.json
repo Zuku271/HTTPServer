@@ -1,0 +1,13 @@
+{
+    "config" : {
+        "PORT" : "8889",
+        "startPage" : "index",
+        "Content-Type" : [
+            {
+                "html" : "text/html",
+                "xml" : "application/xml",
+                "jpg" : "image/jpg"
+            }
+        ]
+    }
+}

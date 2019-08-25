@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.*;
 
 
 import java.io.FileInputStream;
@@ -69,14 +70,17 @@ public class Server
 	}
 
 	
-	private void runServer(String configFile)
+	private void runServer(String configFilePath)
 	{
 		ServerSocket serverSocket = null;
 		try
 		{
-			FileInputStream configFileInput = new FileInputStream(configFile);
-			Properties config = new Properties();
-			config.load(configFileInput);
+			//FileInputStream configFileInput = new FileInputStream(configFilePath);
+			//Properties config = new Properties();
+			//config.load(configFileInput);
+			File configFile = new File(configFilePath);
+			ObjectMapper config = new ObjectMapper();
+			config.readValue(configFile, Config.class);
 			
 			
 			if ((PORT = Integer.valueOf(config.getProperty("PORT"))) == 0)
