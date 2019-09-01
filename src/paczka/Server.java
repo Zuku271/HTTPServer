@@ -79,13 +79,14 @@ public class Server
 
 			File configFile = new File(configFilePath);
 			ObjectMapper configObjectMapper = new ObjectMapper();
+			//configObjectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			//Config config = configObjectMapper.readValue(configFile, Config.class);
-			TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
-			Map<String, String> map = configObjectMapper.readValue(configFile, typeRef);
+			//TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
+			ConfigWrapper config = configObjectMapper.readValue(configFile, ConfigWrapper.class);
 			
 			
-			PORT = config.getPort();
-			startPage = config.getPages("startPage");
+			PORT = config.getConfig().get(0).getPort();
+			startPage = config.getConfig().get(0).getPages("startPage");
 			
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Uruchamiam serwer na porcie: " + PORT);
@@ -109,7 +110,7 @@ public class Server
 				
 				if (requestedPath.contentEquals("/"))
 				{
-					pageContent = generatePageFromFile(config.getPages("startPage"));
+					pageContent = generatePageFromFile(config.getConfig().get(0).getPages("startPage"));
 				}
 				else if (requestedPath.startsWith("/dyn/date"))
 				{

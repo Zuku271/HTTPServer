@@ -1,4 +1,6 @@
 {
+    "Config" : [
+        {
     "port" : "8889",
     "pages" : [
         {
@@ -11,5 +13,7 @@
                 "xml" : "application/xml",
                 "jpg" : "image/jpg"
         }
+    ]
+    }
     ]
 }
