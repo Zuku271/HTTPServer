@@ -6,21 +6,21 @@ import java.util.Map;
 public class Config
 {
 	private int port = 8800;
-	private Map<String, String> pages;
-	private Map<String, String> content_type;
+	private Pages pages;
+	private Content_type content_type;
 
 	public int getPort()
 	{
 		return port;
 	}
 	
-	public String getPages(String pageName)
+	public Pages getPages()
 	{
-		return pages.get(pageName);
+		return pages;
 	}
 	
-	public String getContent_Type(String type)
+	public Content_type getContent_Type()
 	{
-		return content_type.get(type);
+		return content_type;
 	}
 }

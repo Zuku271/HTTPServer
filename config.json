@@ -1,19 +1,14 @@
 {
-    "config" : [
-        {
+    
     "port" : "8889",
-    "pages" : [
+    "pages" : 
         {
             "startPage" : "index"
-        }
-        ],
-    "content_type" : [
+        },
+    "content_type" : 
         {
                 "html" : "text/html",
                 "xml" : "application/xml",
                 "jpg" : "image/jpg"
         }
-    ]
-    }
-    ]
 }

@@ -82,11 +82,11 @@ public class Server
 			//configObjectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 			//Config config = configObjectMapper.readValue(configFile, Config.class);
 			//TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
-			ConfigWrapper config = configObjectMapper.readValue(configFile, ConfigWrapper.class);
+			Config config = configObjectMapper.readValue(configFile, Config.class);
 			
 			
-			PORT = config.getConfig().get(0).getPort();
-			startPage = config.getConfig().get(0).getPages("startPage");
+			PORT = config.getPort();
+			startPage = config.getPages().getstartPage();
 			
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Uruchamiam serwer na porcie: " + PORT);
@@ -110,7 +110,7 @@ public class Server
 				
 				if (requestedPath.contentEquals("/"))
 				{
-					pageContent = generatePageFromFile(config.getConfig().get(0).getPages("startPage"));
+					pageContent = generatePageFromFile(config.getPages().getstartPage());
 				}
 				else if (requestedPath.startsWith("/dyn/date"))
 				{
