@@ -1,6 +1,6 @@
 package paczka;
 
-public class Content_type
+public class ContentType
 {
 	String html;
 	String xml;

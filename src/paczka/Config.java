@@ -7,7 +7,7 @@ public class Config
 {
 	private int port = 8800;
 	private Pages pages;
-	private Content_type content_type;
+	private ContentType contenttype;
 
 	public int getPort()
 	{
@@ -19,8 +19,8 @@ public class Config
 		return pages;
 	}
 	
-	public Content_type getContent_Type()
+	public ContentType getContentType()
 	{
-		return content_type;
+		return contenttype;
 	}
 }
