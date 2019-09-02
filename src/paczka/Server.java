@@ -87,6 +87,8 @@ public class Server
 			
 			PORT = config.getPort();
 			startPage = config.getPages().getstartPage();
+			System.out.println("start page: " + startPage);
+			System.out.println("ContentType: " + config.getContentType().html);
 			
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Uruchamiam serwer na porcie: " + PORT);
