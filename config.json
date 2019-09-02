@@ -1,5 +1,5 @@
 {
-    "Config" : [
+    "config" : [
         {
     "port" : "8889",
     "pages" : [
