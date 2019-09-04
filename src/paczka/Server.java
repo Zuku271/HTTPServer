@@ -79,16 +79,12 @@ public class Server
 
 			File configFile = new File(configFilePath);
 			ObjectMapper configObjectMapper = new ObjectMapper();
-			//configObjectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-			//Config config = configObjectMapper.readValue(configFile, Config.class);
-			//TypeReference<HashMap<String, String>> typeRef = new TypeReference<HashMap<String, String>>() {};
 			Config config = configObjectMapper.readValue(configFile, Config.class);
 			
 			
 			PORT = config.getPort();
 			startPage = config.getPages().getstartPage();
-			System.out.println("start page: " + startPage);
-			System.out.println("ContentType: " + config.getContentType().html);
+
 			
 			serverSocket = new ServerSocket(PORT);
 			System.out.println("Uruchamiam serwer na porcie: " + PORT);

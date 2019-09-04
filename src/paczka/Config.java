@@ -1,8 +1,5 @@
 package paczka;
 
-
-import java.util.Map;
-
 public class Config
 {
 	private int port = 8800;
