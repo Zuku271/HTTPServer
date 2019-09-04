@@ -2,7 +2,7 @@
     "port" : "8889",
     "pages" : 
         {
-            "startPage" : "index",
+            "startPage" : "index.html",
             "rsPage" : "res"
         },
     "contenttype" : 

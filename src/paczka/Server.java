@@ -31,6 +31,7 @@ public class Server
 {
 	private static int PORT = 8800;
 	private static String startPage = "";
+	private Config config;
 	
 	private List<String> getHttpHeader(BufferedReader br)
 	{
@@ -79,7 +80,7 @@ public class Server
 
 			File configFile = new File(configFilePath);
 			ObjectMapper configObjectMapper = new ObjectMapper();
-			Config config = configObjectMapper.readValue(configFile, Config.class);
+			config = configObjectMapper.readValue(configFile, Config.class);
 			
 			
 			PORT = config.getPort();
@@ -166,6 +167,7 @@ public class Server
 		sb.append("HTTP/1.1 200 OK").append("\r\n");
 		sb.append("Connection: close").append("\r\n");
 		sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
+		//sb.append("Content-Type: ").append(config.getContentType().).append("charset=utf-8").append("\r\n");
 		sb.append("\r\n");
 
 		// tresc http (html)
