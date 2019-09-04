@@ -1,0 +1,13 @@
+ <rozklad>
+ 2   <miejscowosc>Poznań</miejscowosc> 
+ 3   <linia>
+ 4       <numer>5</numer>
+ 5       <poczatek>Górczyn</poczatek>
+ 6       <koniec>Miłostowo</koniec>
+ 7   </linia>
+ 8   <linia>
+ 9       <numer>105</numer>
+10       <poczatek>Rondo Rataje</poczatek>
+11       <koniec>Piątkowo</koniec>
+12   </linia>
+13 </rozklad>

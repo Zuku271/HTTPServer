@@ -119,6 +119,7 @@ public class Server
 				{
 					String localPath = "res" + requestedPath;
 					pageContent = generatePageFromFile(localPath);
+					System.out.println("Path: " + localPath);
 				}
 				
 				/*if (pageContent == null || requestedPath == "/")
@@ -163,11 +164,36 @@ public class Server
 	private String generatePageFromFile(String path)
 	{
 		StringBuilder sb = new StringBuilder();
+		String extension = "";
+
+		int i = path.lastIndexOf('.');
+		if (i > 0) {
+		    extension = path.substring(i+1);
+		}
 
 		sb.append("HTTP/1.1 200 OK").append("\r\n");
 		sb.append("Connection: close").append("\r\n");
-		sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
-		//sb.append("Content-Type: ").append(config.getContentType().).append("charset=utf-8").append("\r\n");
+		//sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
+		sb.append("Content-Type: ");
+		
+		if (extension.contentEquals("html"))
+		{
+			sb.append(config.getContentType().getHtml() + ";");
+		}
+		else if (extension.contentEquals("xml"))
+		{
+			sb.append(config.getContentType().getXml() + ";");
+		}
+		else if (extension.contentEquals("jpg"))
+		{
+			sb.append(config.getContentType().getJpg() + ";");
+		}
+		else
+		{
+			sb.append("text/html;");
+		}
+		
+		sb.append("charset=utf-8").append("\r\n");
 		sb.append("\r\n");
 
 		// tresc http (html)

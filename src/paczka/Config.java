@@ -1,5 +1,7 @@
 package paczka;
 
+import java.util.List;
+
 public class Config
 {
 	private int port = 8800;
