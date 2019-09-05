@@ -4,15 +4,20 @@ import java.util.Map;
 
 public class ContentType
 {
-	Map<String, String> contenttype;
+	Map<String, String> content;
 	
-	public String getContentType(String name)
+	public ContentType(String key, String value)
 	{
-		return contenttype.get(name);
+		this.content.put(key, value);
 	}
 	
-	public void setContentType(String key, String value)
+	public Map<String, String>getContent()
 	{
-		this.contenttype.put(key, value);
+		return content;
+	}
+	
+	public void setContent(String key, String value)
+	{
+		this.content.put(key, value);
 	}
 }

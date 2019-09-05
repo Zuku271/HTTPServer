@@ -1,6 +1,7 @@
 package paczka;
 
 import java.util.List;
+import java.util.Map;
 
 public class Config
 {
@@ -33,8 +34,8 @@ public class Config
 		return contenttype;
 	}
 	
-	public void setContenttype(ContentType contenttype)
+	public void setContentType(ContentType content)
 	{
-		this.contenttype = contenttype;
+		this.contenttype = content;
 	}
 }

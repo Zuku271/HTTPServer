@@ -178,15 +178,15 @@ public class Server
 		
 		if (extension.contentEquals("html"))
 		{
-			sb.append(config.getContentType().getHtml() + ";");
+			sb.append(config.getContentType().getContent().get("html") );
 		}
 		else if (extension.contentEquals("xml"))
 		{
-			sb.append(config.getContentType().getXml() + ";");
+			sb.append(config.getContentType().getContent().get("html") );
 		}
 		else if (extension.contentEquals("jpg"))
 		{
-			sb.append(config.getContentType().getJpg() + ";");
+			sb.append(config.getContentType().getContent().get("html") );
 		}
 		else
 		{
