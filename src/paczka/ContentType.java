@@ -1,38 +1,18 @@
 package paczka;
 
+import java.util.Map;
+
 public class ContentType
 {
-	String html;
-	String xml;
-	String jpg;
+	Map<String, String> contenttype;
 	
-	public String getHtml()
+	public String getContentType(String name)
 	{
-		return html;
+		return contenttype.get(name);
 	}
 	
-	public void setHtml(String html)
+	public void setContentType(String key, String value)
 	{
-		this.html = html;
-	}
-	
-	public String getXml()
-	{
-		return xml;
-	}
-	
-	public void setXml(String xml)
-	{
-		this.xml = xml;
-	}
-	
-	public String getJpg()
-	{
-		return jpg;
-	}
-	
-	public void setJpg(String jpg)
-	{
-		this.jpg = jpg;
+		this.contenttype.put(key, value);
 	}
 }

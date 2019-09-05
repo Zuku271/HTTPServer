@@ -6,9 +6,11 @@
             "rsPage" : "res"
         },
     "contenttype" : 
-        {
-            "html" : "text/html",
-            "xml" : "application/xml",
-            "jpg" : "image/jpg"
-        }
+        
+            {
+                "html" : "text/html",
+                "xml" : "application/xml",
+                "jpg" : "image/jpg"
+            }
+        
 }
