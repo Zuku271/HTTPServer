@@ -5,7 +5,7 @@
             "startPage" : "index.html",
             "rsPage" : "res"
         },
-    "contenttype" : 
+    "ContentType" : 
         
             {
                 "html" : "text/html",

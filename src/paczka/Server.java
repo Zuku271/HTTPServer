@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.*;
 
 
@@ -80,11 +81,15 @@ public class Server
 
 			File configFile = new File(configFilePath);
 			ObjectMapper configObjectMapper = new ObjectMapper();
+			SimpleModule module = new SimpleModule();
+			module.addDeserializer(Config.class, new ItemDeserializer());
+			configObjectMapper.registerModule(module);
+			
 			config = configObjectMapper.readValue(configFile, Config.class);
 			
 			
 			PORT = config.getPort();
-			startPage = config.getPages().getstartPage();
+			startPage = config.getPages().get("startPage");
 
 			
 			serverSocket = new ServerSocket(PORT);
@@ -109,7 +114,7 @@ public class Server
 				
 				if (requestedPath.contentEquals("/"))
 				{
-					pageContent = generatePageFromFile(config.getPages().getstartPage());
+					pageContent = generatePageFromFile(config.getPages().get("startPage"));
 				}
 				else if (requestedPath.startsWith("/dyn/date"))
 				{
@@ -170,30 +175,30 @@ public class Server
 		if (i > 0) {
 		    extension = path.substring(i+1);
 		}
-
+		HashMap<Object, String> test = config.getContentType();
+		test.get("jpg");
 		sb.append("HTTP/1.1 200 OK").append("\r\n");
 		sb.append("Connection: close").append("\r\n");
 		//sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
 		sb.append("Content-Type: ");
-		
-		if (extension.contentEquals("html"))
+		/*
+		if (config.getContentType().get(extension) != null)
 		{
-			sb.append(config.getContentType().getContent().get("html") );
-		}
-		else if (extension.contentEquals("xml"))
-		{
-			sb.append(config.getContentType().getContent().get("html") );
-		}
-		else if (extension.contentEquals("jpg"))
-		{
-			sb.append(config.getContentType().getContent().get("html") );
+			sb.append(config.getContentType().get(extension) + ";" );
 		}
 		else
 		{
 			sb.append("text/html;");
-		}
+		}*/
 		
-		sb.append("charset=utf-8").append("\r\n");
+		try
+		{
+			sb.append(config.getContentType().get(extension) + ";" );
+		} catch (NullPointerException e)
+		{
+			sb.append("text/html;");
+		}
+		sb.append(" charset=utf-8").append("\r\n");
 		sb.append("\r\n");
 
 		// tresc http (html)

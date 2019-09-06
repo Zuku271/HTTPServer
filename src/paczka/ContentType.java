@@ -1,17 +1,18 @@
 package paczka;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ContentType
 {
-	Map<String, String> content;
+	HashMap<Object, String> content;
 	
 	public ContentType(String key, String value)
 	{
 		this.content.put(key, value);
 	}
 	
-	public Map<String, String>getContent()
+	public HashMap<Object, String>getContent()
 	{
 		return content;
 	}

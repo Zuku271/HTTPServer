@@ -1,14 +1,21 @@
 package paczka;
 
-import java.util.List;
-import java.util.Map;
+import java.util.HashMap;
 
 public class Config
 {
 	private int port = 8800;
-	private Pages pages;
-	private ContentType contenttype;
+	private HashMap<Object, String> pages;
+	private HashMap<Object, String> contenttype;
 
+	
+	public Config(int port, HashMap<Object, String> pages, HashMap<Object, String> contenttype)
+	{
+		this.port = port;
+		this.pages = pages;
+		this.contenttype = contenttype;
+	}
+	
 	public int getPort()
 	{
 		return port;
@@ -19,22 +26,22 @@ public class Config
 		this.port = port;
 	}
 	
-	public Pages getPages()
+	public HashMap<Object, String> getPages()
 	{
 		return pages;
 	}
 	
-	public void setPages(Pages pages)
+	public void setPages(HashMap<Object, String> pages)
 	{
 		this.pages = pages;
 	}
 	
-	public ContentType getContentType()
+	public HashMap<Object, String> getContentType()
 	{
 		return contenttype;
 	}
 	
-	public void setContentType(ContentType content)
+	public void setContentType(HashMap<Object, String> content)
 	{
 		this.contenttype = content;
 	}
