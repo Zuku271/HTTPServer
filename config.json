@@ -12,6 +12,8 @@
                 "html" : "text/html",
                 "xml" : "application/xml",
                 "jpg" : "image/jpg"
-            }
+            },
+    "logFilename" : "log.csv",
+    "blacklist" : "blacklist.csv"
         
 }

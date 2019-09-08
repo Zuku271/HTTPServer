@@ -7,6 +7,7 @@ public class Config
 	private int port = 8800;
 	private HashMap<Object, String> pages;
 	private HashMap<Object, String> contenttype;
+	private String logFilename;
 
 	
 	public Config(int port, HashMap<Object, String> pages, HashMap<Object, String> contenttype)
@@ -44,5 +45,15 @@ public class Config
 	public void setContentType(HashMap<Object, String> content)
 	{
 		this.contenttype = content;
+	}
+	
+	public String getLogFilename()
+	{
+		return logFilename;
+	}
+	
+	public void setLogFilename(String filename)
+	{
+		this.logFilename = filename;
 	}
 }
