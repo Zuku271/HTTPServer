@@ -71,6 +71,18 @@ public class Server
 		}
 		return null;
 	}
+	
+	private String findUserAgentLine(List<String> headerLines)
+	{
+		for (String s : headerLines)
+		{
+			if (s.startsWith("User-Agent"))
+			{
+				return s;
+			}
+		}
+		return null;
+	}
 
 	private String getPathFromGetLine(String getLine)
 	{
@@ -123,7 +135,7 @@ public class Server
 				}
 				System.out.println("GET Path:" + requestedPath);
 
-				//log.save(ZonedDateTime.now(), serverSocket.getInetAddress(), user_agent, requestedPath);
+				log.save(ZonedDateTime.now(), serverSocket.getInetAddress(), findUserAgentLine(headerLines), requestedPath);
 				
 				String pageContent = null;
 
