@@ -13,7 +13,7 @@
                 "xml" : "application/xml",
                 "jpg" : "image/jpg"
             },
-    "logFilename" : "log.csv",
+    "LogFilename" : "\\log.csv",
     "blacklist" : "blacklist.csv"
         
 }

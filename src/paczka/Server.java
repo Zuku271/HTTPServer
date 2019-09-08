@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,17 +94,22 @@ public class Server
 			configObjectMapper.registerModule(module);
 			
 			config = configObjectMapper.readValue(configFile, Config.class);
-			
-			
+						
 			PORT = config.getPort();
 			startPage = config.getPages().get("startPage");
-
+			DataLogger log = new DataLogger("log.csv");
 			
 			serverSocket = new ServerSocket(PORT);
+			/*if (serverSocket.isBound())
+			{
+				log = new DataLogger(config.getLogFilename());
+			}*/
+
 			System.out.println("Uruchamiam serwer na porcie: " + PORT);
 			while (true)
 			{
 				Socket s = serverSocket.accept();
+				
 				System.out.println("Polaczony klient: " + s.getRemoteSocketAddress());
 				
 				BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
@@ -117,6 +123,8 @@ public class Server
 				}
 				System.out.println("GET Path:" + requestedPath);
 
+				//log.save(ZonedDateTime.now(), serverSocket.getInetAddress(), user_agent, requestedPath);
+				
 				String pageContent = null;
 
 				if (requestedPath.contentEquals("/"))
