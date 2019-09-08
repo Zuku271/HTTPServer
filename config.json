@@ -3,6 +3,7 @@
     "pages" : 
         {
             "startPage" : "index.html",
+            "statusNotFoundtPage" : "404.html",
             "rsPage" : "res"
         },
     "ContentType" : 

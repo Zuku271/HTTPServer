@@ -34,6 +34,13 @@ public class Server
 	private static String startPage = "";
 	private Config config;
 	
+	private enum PageStatus
+	{
+		wasFound,
+		wasNotFound
+	}
+	
+	
 	private List<String> getHttpHeader(BufferedReader br)
 	{
 
@@ -111,10 +118,10 @@ public class Server
 				System.out.println("GET Path:" + requestedPath);
 
 				String pageContent = null;
-				
+
 				if (requestedPath.contentEquals("/"))
 				{
-					pageContent = generatePageFromFile(config.getPages().get("startPage"));
+					pageContent = generatePageFromFile(config.getPages().get("startPage"), PageStatus.wasFound);
 				}
 				else if (requestedPath.startsWith("/dyn/date"))
 				{
@@ -123,10 +130,14 @@ public class Server
 				else
 				{
 					String localPath = "res" + requestedPath;
-					pageContent = generatePageFromFile(localPath);
+					pageContent = generatePageFromFile(localPath, PageStatus.wasFound);
 					System.out.println("Path: " + localPath);
 				}
 				
+				if (pageContent == null)
+				{
+					pageContent = generatePageFromFile(config.getPages().get("statusNotFoundtPage"), PageStatus.wasNotFound);
+				}
 				/*if (pageContent == null || requestedPath == "/")
 				{
 					pageContent = generateDefaultPage();
@@ -166,22 +177,29 @@ public class Server
 		return sb.toString();
 	}
 	
-	private String generatePageFromFile(String path)
+	private String generatePageFromFile(String path, PageStatus status)
 	{
 		StringBuilder sb = new StringBuilder();
 		String extension = "";
 
 		int i = path.lastIndexOf('.');
-		if (i > 0) {
+		if (i > 0)
+		{
 		    extension = path.substring(i+1);
 		}
-		HashMap<Object, String> test = config.getContentType();
-		test.get("jpg");
-		sb.append("HTTP/1.1 200 OK").append("\r\n");
-		sb.append("Connection: close").append("\r\n");
+		
+		if (status == PageStatus.wasFound)
+		{
+			sb.append("HTTP/1.1 200 OK");
+		}
+		else
+		{
+			sb.append("HTTP/1.1 404 Not Found");
+		}
+		sb.append("\r\n").append("Connection: close").append("\r\n");
 		//sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
 		sb.append("Content-Type: ");
-		/*
+		
 		if (config.getContentType().get(extension) != null)
 		{
 			sb.append(config.getContentType().get(extension) + ";" );
@@ -189,15 +207,8 @@ public class Server
 		else
 		{
 			sb.append("text/html;");
-		}*/
-		
-		try
-		{
-			sb.append(config.getContentType().get(extension) + ";" );
-		} catch (NullPointerException e)
-		{
-			sb.append("text/html;");
 		}
+		
 		sb.append(" charset=utf-8").append("\r\n");
 		sb.append("\r\n");
 
