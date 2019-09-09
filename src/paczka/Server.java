@@ -135,7 +135,7 @@ public class Server
 				}
 				System.out.println("GET Path:" + requestedPath);
 
-				log.save(ZonedDateTime.now(), serverSocket.getInetAddress(), findUserAgentLine(headerLines), requestedPath);
+				log.save(ZonedDateTime.now(), s.getRemoteSocketAddress(), findUserAgentLine(headerLines), requestedPath);
 				
 				String pageContent = null;
 

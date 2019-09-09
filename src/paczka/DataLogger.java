@@ -10,9 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.InetAddress;
-import java.util.List;
-
+import java.net.SocketAddress;
 
 public class DataLogger
 {
@@ -29,7 +27,7 @@ public class DataLogger
 		this.path = new File((logFilename)).getPath();	
 	}
 	
-	public void save(ZonedDateTime time, InetAddress IP, String user_agent, String requestedPath) throws IOException
+	public void save(ZonedDateTime time, SocketAddress IP, String user_agent, String requestedPath) throws IOException
 	{
 		//List<String> file_content = load();
 		StringBuilder entry = new StringBuilder(time.toString()).append(",");
