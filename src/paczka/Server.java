@@ -29,11 +29,18 @@ import java.io.FileReader;
 
 import java.util.*; 
 
-public class Server
+class Server implements Runnable
 {
 	private static int PORT = 8800;
 	private static String startPage = "";
 	private Config config;
+	private Socket socket;
+	
+	public Server(Socket socket, Config config)
+	{
+		this.socket = socket;
+		this.config = config;
+	}
 	
 	private enum PageStatus
 	{
@@ -92,40 +99,39 @@ public class Server
 		return path;
 	}
 
-	
-	private void runServer(String configFilePath)
+	@Override
+	public void run()
 	{
 		ServerSocket serverSocket = null;
 		try
 		{
-
+/*
 			File configFile = new File(configFilePath);
 			ObjectMapper configObjectMapper = new ObjectMapper();
 			SimpleModule module = new SimpleModule();
 			module.addDeserializer(Config.class, new ItemDeserializer());
 			configObjectMapper.registerModule(module);
 			
-			config = configObjectMapper.readValue(configFile, Config.class);
+			config = configObjectMapper.readValue(configFile, Config.class);*/
 						
 			PORT = config.getPort();
 			startPage = config.getPages().get("startPage");
 			DataLogger log = new DataLogger("log.csv");
 			
-			serverSocket = new ServerSocket(PORT);
+			//serverSocket = new ServerSocket(PORT);
 			/*if (serverSocket.isBound())
 			{
 				log = new DataLogger(config.getLogFilename());
 			}*/
 
-			System.out.println("Uruchamiam serwer na porcie: " + PORT);
-			while (true)
-			{
-				Socket s = serverSocket.accept();
+			SecurityManager sm = System.getSecurityManager();
+			//sm.checkConnect(arg0, arg1);
+			//Socket s = serverSocket.accept();
 				
-				System.out.println("Polaczony klient: " + s.getRemoteSocketAddress());
+			System.out.println("Polaczony klient: " + socket.getRemoteSocketAddress() + " " + socket.getLocalAddress());
 				
-				BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
-				List<String> headerLines = getHttpHeader(br);
+			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+			List<String> headerLines = getHttpHeader(br);
 
 				String requestedPath = "";
 				String getLine = findGETLine(headerLines);
@@ -135,7 +141,7 @@ public class Server
 				}
 				System.out.println("GET Path:" + requestedPath);
 
-				log.save(ZonedDateTime.now(), s.getRemoteSocketAddress(), findUserAgentLine(headerLines), requestedPath);
+				log.save(ZonedDateTime.now(), socket.getRemoteSocketAddress(), findUserAgentLine(headerLines), requestedPath);
 				
 				String pageContent = null;
 
@@ -162,19 +168,22 @@ public class Server
 				{
 					pageContent = generateDefaultPage();
 				}*/
-				// wyslanie strony
-				PrintWriter pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream(), "UTF-8"));
+				
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 				pw.println(pageContent);
 				pw.flush();
-				s.getOutputStream().close();
-				s.close();
-			}
-			
+				socket.getOutputStream().close();
+				//socket.close();
+
 		} catch (IOException e)
 		{
 			e.printStackTrace();
-		}
-	}
+		} finally {
+            try { socket.close(); } catch (IOException e) {}
+            System.out.println("Closed: " + socket);
+        }
+
+	}	
 	
 	private String readTextFile(String path)
 	{
@@ -241,11 +250,8 @@ public class Server
 
 		return sb.toString();
 	}
+
 	
-	public static void main(String[] args)
-	{
-		Server instance = new Server();
-		instance.runServer("config.json");
-		System.out.println("Uruchamiam serwer na porcie: ");
-	}
+	
+	
 }
