@@ -32,7 +32,7 @@ public class ItemDeserializer extends StdDeserializer<Config>
         JsonNode node = jp.getCodec().readTree(jp);
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<Object, String>> typeRef = new TypeReference<HashMap<Object, String>>() {};
-        System.out.println("typ  " + node.get("pages").getNodeType());
+        
         int port = node.get("port").asInt();
         HashMap<Object, String> pages = mapper.convertValue(node.get("pages"), typeRef);
         HashMap<Object, String> ContentType = mapper.convertValue(node.get("ContentType"), typeRef);

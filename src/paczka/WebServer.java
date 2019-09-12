@@ -3,7 +3,9 @@ package paczka;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketPermission;
+import java.time.ZonedDateTime;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -24,24 +26,19 @@ public class WebServer
 			configObjectMapper.registerModule(module);
 			
 			Config config = configObjectMapper.readValue(configFile, Config.class);
-
+			
 		
 			try (ServerSocket s = new ServerSocket(config.getPort()))
 			{
 				System.out.println("The web server is running...");
-				Executor pool = Executors.newFixedThreadPool(8);
-				SecurityManager security = new SecurityManager();
-				
-				SocketPermission sm = new SocketPermission("localhost:1024-65535", "accept, connect, listen");
-				
-				//System.setSecurityManager(security);
-				
+				Executor pool = Executors.newFixedThreadPool(100);
+						
 				while (true)
 				{
-					pool.execute(new Server(s.accept(), config));
-				}
-
-			
+					Socket socket = s.accept();
+					
+					pool.execute(new Server(socket, config));
+				} 
 			}
 		} catch (IOException e)
 		{

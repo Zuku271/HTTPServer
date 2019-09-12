@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.file.AccessDeniedException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -102,7 +103,6 @@ class Server implements Runnable
 	@Override
 	public void run()
 	{
-		ServerSocket serverSocket = null;
 		try
 		{
 /*
@@ -113,7 +113,7 @@ class Server implements Runnable
 			configObjectMapper.registerModule(module);
 			
 			config = configObjectMapper.readValue(configFile, Config.class);*/
-						
+			
 			PORT = config.getPort();
 			startPage = config.getPages().get("startPage");
 			DataLogger log = new DataLogger("log.csv");
@@ -124,61 +124,56 @@ class Server implements Runnable
 				log = new DataLogger(config.getLogFilename());
 			}*/
 
-			SecurityManager sm = System.getSecurityManager();
+			//SecurityManager sm = System.getSecurityManager();
 			//sm.checkConnect(arg0, arg1);
 			//Socket s = serverSocket.accept();
 				
-			System.out.println("Polaczony klient: " + socket.getRemoteSocketAddress() + " " + socket.getLocalAddress());
+			System.out.println("Polaczony klient: " + socket.getInetAddress() + " " + socket.getLocalAddress());
 				
 			BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			List<String> headerLines = getHttpHeader(br);
 
-				String requestedPath = "";
-				String getLine = findGETLine(headerLines);
-				if (getLine != null)
-				{
-					requestedPath = getPathFromGetLine(getLine);
-				}
-				System.out.println("GET Path:" + requestedPath);
-
-				log.save(ZonedDateTime.now(), socket.getRemoteSocketAddress(), findUserAgentLine(headerLines), requestedPath);
-				
-				String pageContent = null;
-
+			String requestedPath = "";
+			String getLine = findGETLine(headerLines);
+			if (getLine != null)
+			{
+				requestedPath = getPathFromGetLine(getLine);
+			}
+			System.out.println("GET Path:" + requestedPath);
+			log.save(ZonedDateTime.now(), socket.getInetAddress(), findUserAgentLine(headerLines), requestedPath);
+			
+			String pageContent = null;
 				if (requestedPath.contentEquals("/"))
-				{
-					pageContent = generatePageFromFile(config.getPages().get("startPage"), PageStatus.wasFound);
-				}
-				else if (requestedPath.startsWith("/dyn/date"))
-				{
-					//pageContent = generateJSONDatePage();
-				}
-				else
-				{
-					String localPath = "res" + requestedPath;
-					pageContent = generatePageFromFile(localPath, PageStatus.wasFound);
-					System.out.println("Path: " + localPath);
-				}
-				
-				if (pageContent == null)
-				{
-					pageContent = generatePageFromFile(config.getPages().get("statusNotFoundtPage"), PageStatus.wasNotFound);
-				}
-				/*if (pageContent == null || requestedPath == "/")
-				{
-					pageContent = generateDefaultPage();
-				}*/
-				
-				PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
-				pw.println(pageContent);
-				pw.flush();
-				socket.getOutputStream().close();
-				//socket.close();
+			{
+				pageContent = generatePageFromFile(config.getPages().get("startPage"), PageStatus.wasFound);
+			}
+			else if (requestedPath.startsWith("/dyn/date"))
+			{
+				//pageContent = generateJSONDatePage();
+			}
+			else
+			{
+				String localPath = "res" + requestedPath;
+				pageContent = generatePageFromFile(localPath, PageStatus.wasFound);
+				System.out.println("Path: " + localPath);
+			}
+			
+			if (pageContent == null)
+			{
+				pageContent = generatePageFromFile(config.getPages().get("statusNotFoundtPage"), PageStatus.wasNotFound);
+			}
+			
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
+			pw.println(pageContent);
+			pw.flush();
+			socket.getOutputStream().close();
+			//socket.close();
 
 		} catch (IOException e)
 		{
 			e.printStackTrace();
-		} finally {
+		} finally
+		{
             try { socket.close(); } catch (IOException e) {}
             System.out.println("Closed: " + socket);
         }
@@ -251,6 +246,10 @@ class Server implements Runnable
 		return sb.toString();
 	}
 
+	private void checkAccess() throws AccessDeniedException
+	{
+		
+	}
 	
 	
 	

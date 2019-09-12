@@ -1,9 +1,5 @@
 package paczka;
 
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.ZonedDateTime;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -35,9 +31,12 @@ public class DataLogger
 		entry.append(user_agent).append(",");
 		entry.append(requestedPath).append("\r\n");
 				
-		Writer app = new BufferedWriter(new FileWriter(path, true));
-		app.append(entry);
-		app.close();
+		synchronized (this)
+		{
+			Writer app = new BufferedWriter(new FileWriter(path, true));
+			app.append(entry);
+			app.close();
+		}
 	}
 	
 	/*public List<String> load() throws IOException
