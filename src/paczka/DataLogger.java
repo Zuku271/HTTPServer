@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.SocketAddress;
+import java.net.InetAddress;
 
 public class DataLogger
 {
@@ -23,9 +23,8 @@ public class DataLogger
 		this.path = new File((logFilename)).getPath();	
 	}
 	
-	public void save(ZonedDateTime time, SocketAddress IP, String user_agent, String requestedPath) throws IOException
+	public void save(ZonedDateTime time, InetAddress IP, String user_agent, String requestedPath) throws IOException
 	{
-		//List<String> file_content = load();
 		StringBuilder entry = new StringBuilder(time.toString()).append(",");
 		entry.append(IP.toString()).append(",");
 		entry.append(user_agent).append(",");
@@ -38,9 +37,4 @@ public class DataLogger
 			app.close();
 		}
 	}
-	
-	/*public List<String> load() throws IOException
-	{
-		return Files.readAllLines(path, Charset.defaultCharset());
-	}*/
 }

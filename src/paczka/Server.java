@@ -143,25 +143,22 @@ class Server implements Runnable
 			log.save(ZonedDateTime.now(), socket.getInetAddress(), findUserAgentLine(headerLines), requestedPath);
 			
 			String pageContent = null;
-				if (requestedPath.contentEquals("/"))
+			
+			if (requestedPath.contentEquals("/"))
 			{
-				pageContent = generatePageFromFile(config.getPages().get("startPage"), PageStatus.wasFound);
-			}
-			else if (requestedPath.startsWith("/dyn/date"))
-			{
-				//pageContent = generateJSONDatePage();
+				pageContent = generatePageFromFile(config.getPages().get("startPage"));
 			}
 			else
 			{
 				String localPath = "res" + requestedPath;
-				pageContent = generatePageFromFile(localPath, PageStatus.wasFound);
+				pageContent = generatePageFromFile(localPath);
 				System.out.println("Path: " + localPath);
 			}
 			
-			if (pageContent == null)
+			/*if (pageContent == null)
 			{
-				pageContent = generatePageFromFile(config.getPages().get("statusNotFoundtPage"), PageStatus.wasNotFound);
-			}
+				pageContent = generateNotFoundPage(config.getPages().get("statusNotFoundtPage"));
+			}*/
 			
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 			pw.println(pageContent);
@@ -201,7 +198,7 @@ class Server implements Runnable
 		return sb.toString();
 	}
 	
-	private String generatePageFromFile(String path, PageStatus status)
+	private String generatePageFromFile(String path)
 	{
 		StringBuilder sb = new StringBuilder();
 		String extension = "";
@@ -212,40 +209,55 @@ class Server implements Runnable
 		    extension = path.substring(i+1);
 		}
 		
-		if (status == PageStatus.wasFound)
+		String fileContent = readTextFile(path);
+		
+		if (fileContent != null)
 		{
 			sb.append("HTTP/1.1 200 OK");
+			sb.append("\r\n").append("Connection: close").append("\r\n");
+			sb.append("Content-Type: ");
+			
+			if (config.getContentType().get(extension) != null)
+			{
+				sb.append(config.getContentType().get(extension) + ";" );
+			}
+			else
+			{
+				sb.append("text/html;");
+			}
 		}
 		else
 		{
+			fileContent = readTextFile(config.getPages().get("statusNotFoundtPage"));
 			sb.append("HTTP/1.1 404 Not Found");
+			sb.append("\r\n").append("Connection: close").append("\r\n");
+			sb.append("Content-Type: ");sb.append("text/html;");
 		}
-		sb.append("\r\n").append("Connection: close").append("\r\n");
-		//sb.append("Content-Type: text/html; charset=utf-8").append("\r\n");
-		sb.append("Content-Type: ");
-		
-		if (config.getContentType().get(extension) != null)
-		{
-			sb.append(config.getContentType().get(extension) + ";" );
-		}
-		else
-		{
-			sb.append("text/html;");
-		}
-		
+			
 		sb.append(" charset=utf-8").append("\r\n");
 		sb.append("\r\n");
 
-		// tresc http (html)
-		String fileContent = readTextFile(path);
-		if (fileContent == null) {
-			return null;
-		}
 		sb.append(fileContent);
 
 		return sb.toString();
 	}
 
+	private String generateNotFoundPage(String path)
+	{
+		StringBuilder sb = new StringBuilder();
+		String fileContent = readTextFile(path);
+		
+		sb.append("HTTP/1.1 404 Not Found");
+		sb.append("\r\n").append("Connection: close").append("\r\n");
+		sb.append("Content-Type: ").append("text/html;");
+		sb.append(" charset=utf-8").append("\r\n");
+		sb.append("\r\n");
+
+		sb.append(fileContent);
+
+		return sb.toString();
+	}
+	
 	private void checkAccess() throws AccessDeniedException
 	{
 		

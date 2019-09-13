@@ -35,9 +35,7 @@ public class WebServer
 						
 				while (true)
 				{
-					Socket socket = s.accept();
-					
-					pool.execute(new Server(socket, config));
+					pool.execute(new Server(s.accept(), config));
 				} 
 			}
 		} catch (IOException e)
