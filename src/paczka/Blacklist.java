@@ -50,7 +50,8 @@ public class Blacklist
 	
 	public boolean checkAccept(Socket s) throws AccessDeniedException
 	{
-		if (blocked_list.indexOf(s.getInetAddress().getAddress().toString()) == -1)
+		System.out.println("Blacklist check: " + s.getInetAddress().toString());
+		if (blocked_list.indexOf(s.getInetAddress().toString()) == -1)
 		{
 			return true;
 		}

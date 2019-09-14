@@ -18,7 +18,6 @@ public class WebServer
 	{
 		try
 		{
-			/*Server instance = new Server();*/
 			File configFile = new File("config.json");
 			ObjectMapper configObjectMapper = new ObjectMapper();
 			SimpleModule module = new SimpleModule();
@@ -40,6 +39,10 @@ public class WebServer
 					if (bl.checkAccept(sc))
 					{
 						pool.execute(new Server(sc, config));
+					}
+					else
+					{
+						sc.close();
 					}
 				} 
 			}

@@ -32,8 +32,6 @@ import java.util.*;
 
 class Server implements Runnable
 {
-	private static int PORT = 8800;
-	private static String startPage = "";
 	private Config config;
 	private Socket socket;
 	
@@ -42,13 +40,6 @@ class Server implements Runnable
 		this.socket = socket;
 		this.config = config;
 	}
-	
-	private enum PageStatus
-	{
-		wasFound,
-		wasNotFound
-	}
-	
 	
 	private List<String> getHttpHeader(BufferedReader br)
 	{
@@ -105,28 +96,7 @@ class Server implements Runnable
 	{
 		try
 		{
-/*
-			File configFile = new File(configFilePath);
-			ObjectMapper configObjectMapper = new ObjectMapper();
-			SimpleModule module = new SimpleModule();
-			module.addDeserializer(Config.class, new ItemDeserializer());
-			configObjectMapper.registerModule(module);
-			
-			config = configObjectMapper.readValue(configFile, Config.class);*/
-			
-			PORT = config.getPort();
-			startPage = config.getPages().get("startPage");
 			DataLogger log = new DataLogger("log.csv");
-
-			//serverSocket = new ServerSocket(PORT);
-			/*if (serverSocket.isBound())
-			{
-				log = new DataLogger(config.getLogFilename());
-			}*/
-
-			//SecurityManager sm = System.getSecurityManager();
-			//sm.checkConnect(arg0, arg1);
-			//Socket s = serverSocket.accept();
 				
 			System.out.println("Polaczony klient: " + socket.getInetAddress() + " " + socket.getLocalAddress());
 				
@@ -155,16 +125,10 @@ class Server implements Runnable
 				System.out.println("Path: " + localPath);
 			}
 			
-			/*if (pageContent == null)
-			{
-				pageContent = generateNotFoundPage(config.getPages().get("statusNotFoundtPage"));
-			}*/
-			
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "UTF-8"));
 			pw.println(pageContent);
 			pw.flush();
 			socket.getOutputStream().close();
-			//socket.close();
 
 		} catch (IOException e)
 		{
@@ -241,28 +205,5 @@ class Server implements Runnable
 
 		return sb.toString();
 	}
-
-	private String generateNotFoundPage(String path)
-	{
-		StringBuilder sb = new StringBuilder();
-		String fileContent = readTextFile(path);
-		
-		sb.append("HTTP/1.1 404 Not Found");
-		sb.append("\r\n").append("Connection: close").append("\r\n");
-		sb.append("Content-Type: ").append("text/html;");
-		sb.append(" charset=utf-8").append("\r\n");
-		sb.append("\r\n");
-
-		sb.append(fileContent);
-
-		return sb.toString();
-	}
-	
-	private void checkAccess() throws AccessDeniedException
-	{
-		
-	}
-	
-	
 	
 }
