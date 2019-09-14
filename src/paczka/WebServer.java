@@ -26,7 +26,8 @@ public class WebServer
 			configObjectMapper.registerModule(module);
 			
 			Config config = configObjectMapper.readValue(configFile, Config.class);
-			
+			Blacklist bl = new Blacklist("blacklist.csv");
+			bl.load();
 		
 			try (ServerSocket s = new ServerSocket(config.getPort()))
 			{
@@ -35,7 +36,11 @@ public class WebServer
 						
 				while (true)
 				{
-					pool.execute(new Server(s.accept(), config));
+					Socket sc = s.accept();
+					if (bl.checkAccept(sc))
+					{
+						pool.execute(new Server(sc, config));
+					}
 				} 
 			}
 		} catch (IOException e)

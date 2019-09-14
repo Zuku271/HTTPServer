@@ -1,43 +1,59 @@
 package paczka;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
-public class Blacklist extends ServerSocket
+public class Blacklist
 {
 	private String fileName;
-	private List<SocketAddress> blocked_list;
+	private List<String> blocked_list;
 	
 	public Blacklist(String fileName)
 	{
 		this.fileName = fileName;
+		this.blocked_list = new ArrayList<String>();
 	}
 	
-	public boolean isBlocked(SocketAddress client_adress)
+	public boolean isBlocked(InetSocketAddress client_adress)
 	{
 		return true;
 	}
 	
 	public boolean load()
 	{
-		
-		return false;
+		try(BufferedReader br = new BufferedReader(new FileReader(fileName)))
+		{
+			String ip = "";
+	        while ((ip = br.readLine()) != null)
+	        {
+	        	List<String> splitted_ip = Arrays.asList(ip.split(","));
+	            
+	        	for (String ip_addr : splitted_ip)
+	        	{
+	        		blocked_list.add(ip_addr);
+	        	}
+	        }
+	    } catch (IOException e)
+		{
+	      System.out.println("Blacklist file not found");
+	    }
+		return true;
 	}
 	
-	public Socket accept() throws IOException
+	public boolean checkAccept(Socket s) throws AccessDeniedException
 	{
-		return Socket;
+		if (blocked_list.indexOf(s.getInetAddress().getAddress().toString()) == -1)
+		{
+			return true;
+		}
+		return false;
 	}
 }

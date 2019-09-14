@@ -117,7 +117,7 @@ class Server implements Runnable
 			PORT = config.getPort();
 			startPage = config.getPages().get("startPage");
 			DataLogger log = new DataLogger("log.csv");
-			
+
 			//serverSocket = new ServerSocket(PORT);
 			/*if (serverSocket.isBound())
 			{
